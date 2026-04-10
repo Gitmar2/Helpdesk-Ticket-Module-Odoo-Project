@@ -1,0 +1,14 @@
+<odoo>
+    <record id="action_helpdesk_ticket" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_helpdesk_root" name="Helpdesk" />
+
+    <menuitem id="menu_helpdesk_ticket"
+        name="Tickets"
+        parent="menu_helpdesk_root"
+        action="action_helpdesk_ticket" />
+</odoo>
