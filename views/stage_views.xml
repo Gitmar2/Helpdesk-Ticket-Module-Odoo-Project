@@ -1,0 +1,47 @@
+<odoo>
+    <!-- Stage Tree View -->
+    <record id="view_helpdesk_stage_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.stage.tree</field>
+        <field name="model">helpdesk.ticket.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Stages">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Stage Form View -->
+    <record id="view_helpdesk_stage_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.stage.form</field>
+        <field name="model">helpdesk.ticket.stage</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="sequence" />
+                        <field name="is_done_stage" />
+                        <field name="is_cancelled_stage" />
+                    </group>
+                    <group>
+                        <field name="description" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_helpdesk_stage" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">helpdesk.ticket.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_helpdesk_stage"
+        name="Stages"
+        parent="menu_helpdesk_root"
+        action="action_helpdesk_stage" />
+</odoo>

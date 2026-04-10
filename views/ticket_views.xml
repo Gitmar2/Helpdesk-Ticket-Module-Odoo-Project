@@ -1,0 +1,50 @@
+<odoo>
+    <!-- Ticket Tree View -->
+    <record id="view_helpdesk_ticket_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="employee_id" />
+                <field name="state" />
+                <field name="priority" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Ticket Form View -->
+    <record id="view_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="employee_id" />
+                        <field name="category" />
+                        <field name="priority" />
+                        <field name="state" />
+                    </group>
+                    <group>
+                        <field name="stage_id" />
+                        <field name="assigned_to" />
+                        <field name="date_requested" />
+                        <field name="date_closed" />
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

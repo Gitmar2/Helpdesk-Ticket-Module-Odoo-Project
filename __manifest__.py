@@ -1,11 +1,20 @@
 {
     'name': 'Helpdesk Ticket',
     'version': '1.0',
-    'summary': 'Basic module',
+    'summary': 'Basic helpdesk ticket module',
     'author': 'You',
     'category': 'Tools',
-    'depends': ['base'],
-    #'data': [],
+    'depends': ['base', 'mail', 'hr'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/sequence.xml',
+        'data/stages.xml',
+        'views/menus.xml',
+        'views/ticket_views.xml',
+        'views/stage_views.xml',
+        'views/employee_inherit.xml',
+    ],
     'installable': True,
     'application': True,
+    'license': 'LGPL-3',
 }
