@@ -1,11 +1,11 @@
 {
-    'name': 'Helpdesk Ticket v1.0',
+    'name': 'Helpdesk Ticket',
     'version': '1.0',
     'summary': 'Basic module',
     'author': 'You',
     'category': 'Tools',
     'depends': ['base'],
-    'data': [],
+    #'data': [],
     'installable': True,
     'application': True,
 }
