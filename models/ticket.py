@@ -73,3 +73,36 @@ class HelpdeskTicket(models.Model):
         ('bank', 'Bank')
     ])
     expected_liquidation_date = fields.Date()
+
+
+
+    def action_mark_done(self):
+        self.ensure_one()
+        self.write({'state': 'in_review'})
+        self.message_post(body="Ticket marked as done. Waiting for approval.")
+
+    def action_approve(self):
+        self.ensure_one()
+        self.write({
+            'state': 'approved',
+            'approved_by': self.env.user.id,
+        })
+        self.message_post(body="Ticket has been approved.")
+
+    def action_refuse(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Refuse Reason',
+            'res_model': 'helpdesk.refuse.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_ticket_id': self.id},
+        }
+
+    def action_reopen(self):
+        self.ensure_one()
+        self.write({'state': 'draft'})
+        self.message_post(body="Ticket has been reopened.")
+
+        
