@@ -49,7 +49,7 @@
                 <!-- MAIN FIELDS -->
                 <group>
                     <group>
-                        <field name="name" readonly="1"/>
+                        <field name="name" readonly="1" placeholder="TKT-0000"/>
                         <field name="employee_id"/>
                         <field name="category"/>
                         <field name="priority" widget="priority"/>

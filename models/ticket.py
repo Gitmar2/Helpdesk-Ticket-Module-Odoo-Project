@@ -6,7 +6,7 @@ class HelpdeskTicket(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'name'
 
-    name = fields.Char(default='New', tracking=True)
+    name = fields.Char(string="Ticket Reference", readonly=True, default='New', copy=False)
     employee_id = fields.Many2one('hr.employee', required=True)
     category = fields.Selection([
         ('it', 'IT Support'),
@@ -114,16 +114,11 @@ class HelpdeskTicket(models.Model):
         self.message_post(body="Ticket has been reopened.")
 
  # ===== MGA METHOD NASA IBABA =====
-@api.model_create_multi
-def create(self, vals_list):
-    print("===== CREATE METHOD CALLED =====") # This will show now
-    for vals in vals_list:
-        if vals.get('name', 'New') == 'New':
-            # Ensure the code matches what's in your sequence.xml
-            vals['name'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or 'New'
-        
-        # Set date if not already provided
-        if not vals.get('date_requested'):
-            vals['date_requested'] = fields.Datetime.now()
-            
-    return super(HelpdeskTicket, self).create(vals_list)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+            for vals in vals_list:
+                if vals.get('name', 'New') == 'New':
+                    # Generate sequence number for the ticket
+                    vals['name'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or 'New'
+            return super().create(vals_list)
