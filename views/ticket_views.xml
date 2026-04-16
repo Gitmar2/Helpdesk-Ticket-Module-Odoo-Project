@@ -126,6 +126,10 @@
                     <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                 </group>
 
+                <widget name="web_ribbon" title="Done" bg_color="text-bg-success" invisible="not is_done_stage"/>
+    
+                <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="not is_cancelled_stage"/>
+
             </sheet>
 
             <!-- CHATTER -->

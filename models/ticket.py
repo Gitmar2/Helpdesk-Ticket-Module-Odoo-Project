@@ -23,6 +23,12 @@ class HelpdeskTicket(models.Model):
     ], default='1', tracking=True)
     description = fields.Text()
     stage_id = fields.Many2one('helpdesk.ticket.stage', tracking=True)
+
+    # Ribbon fields:
+    is_done_stage = fields.Boolean(related='stage_id.is_done_stage', string="Is Done Stage", store=True)
+    is_cancelled_stage = fields.Boolean(related='stage_id.is_cancelled_stage', string="Is Cancelled Stage", store=True)
+
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_review', 'Waiting Approval'),
