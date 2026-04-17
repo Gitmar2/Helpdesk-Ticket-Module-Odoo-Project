@@ -1,4 +1,5 @@
 <odoo>
+    <!-- List View -->
     <record id="view_helpdesk_ticket_list" model="ir.ui.view">
         <field name="name">helpdesk.ticket.list</field>
         <field name="model">helpdesk.ticket</field>
@@ -18,7 +19,7 @@
         </field>
     </record>
 
-    
+ <!-- Form View -->   
 <record id="view_helpdesk_ticket_form" model="ir.ui.view">
     <field name="name">helpdesk.ticket.form</field>
     <field name="model">helpdesk.ticket</field>
@@ -44,8 +45,6 @@
             </header>
 
             <sheet>
-
-
                 <!-- MAIN FIELDS -->
                 <group>
                     <group>
@@ -63,14 +62,11 @@
                         <field name="approved_by" readonly="1"/>
                     </group>
                 </group>
-
                 <!-- DESCRIPTION -->
                 <group string="Description">
                     <field name="description" nolabel="1"/>
                 </group>
-
                 <!-- DYNAMIC FIELDS PER CATEGORY -->
-
                 <!-- IT Support -->
                 <group string="IT Support Details" invisible="category != 'it'"> 
                     <group>
@@ -82,7 +78,6 @@
                         <field name="affected_system"/>
                     </group>
                 </group>
-
                 <!-- HR Request -->
                 <group string="HR Request Details" invisible="category != 'hr'">
                     <group>
@@ -93,7 +88,6 @@
                         <field name="hr_notes"/>
                     </group>
                 </group>
-
                 <!-- Facilities -->
                 <group string="Facilities Details" invisible="category != 'facilities'">
                     <group>
@@ -104,7 +98,6 @@
                         <field name="estimated_cost" widget="numeric_tolerance" />
                     </group>
                 </group>
-
                 <!-- Finance -->
                 <group string="Finance Details" invisible="category != 'finance'">
                     <group>
@@ -115,21 +108,16 @@
                         <field name="expected_liquidation_date"/>
                     </group>
                 </group>
-
                 <!-- REFUSED REASON -->
                 <group string="Refused Reason" invisible="state != 'refused'">
                     <field name="refused_reason" nolabel="1" readonly="1"/>
                 </group>
-
                 <!-- ATTACHMENTS -->
                 <group string="Attachments">
                     <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                 </group>
-
                 <widget name="web_ribbon" title="Done" bg_color="text-bg-success" invisible="not is_done_stage"/>
-    
                 <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="not is_cancelled_stage"/>
-
             </sheet>
 
             <!-- CHATTER -->
@@ -138,6 +126,7 @@
         </form>
     </field>
 </record>
+<!-- Calendar View -->
 <record id="view_helpdesk_ticket_calendar" model="ir.ui.view">
     <field name="name">helpdesk.ticket.calendar</field>
     <field name="model">helpdesk.ticket</field>
@@ -146,6 +135,32 @@
             <field name="name"/>
             <field name="employee_id"/>
         </calendar>
+    </field>
+</record>
+
+<!-- Kanban View -->
+<record id="helpdesk_ticket_view_kanban" model="ir.ui.view">
+    <field name="name">helpdesk.ticket.kanban</field>
+    <field name="model">helpdesk.ticket</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="stage_id" quick_create="true">
+            <field name="stage_id"/>
+            <field name="color"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                        <div class="oe_kanban_content">
+                            <strong><field name="name"/></strong>
+                            <div><field name="employee_id"/></div>
+                            <div><field name="category"/></div>
+                            <div class="oe_kanban_footer">
+                                <field name="priority" widget="priority"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
     </field>
 </record>
 </odoo>
