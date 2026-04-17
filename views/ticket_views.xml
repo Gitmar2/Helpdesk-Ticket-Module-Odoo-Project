@@ -1,4 +1,82 @@
 <odoo>
+    <!-- Search View -->
+<record id="view_helpdesk_ticket_search" model="ir.ui.view">
+    <field name="name">helpdesk.ticket.search</field>
+    <field name="model">helpdesk.ticket</field>
+    <field name="arch" type="xml">
+        <search string="Search Tickets">
+
+            <!-- Search Fields -->
+            <field name="name" string="Ticket"/>
+            <field name="employee_id" string="Employee"/>
+            <field name="assigned_to" string="Assigned To"/>
+            <field name="category" string="Category"/>
+
+            <!-- FILTERS -->
+            <filter
+                name="my_tickets"
+                string="My Tickets"
+                domain="[('employee_id.user_id', '=', uid)]"/>
+
+            <filter
+                name="waiting_approval"
+                string="Waiting Approval"
+                domain="[('state', '=', 'in_review')]"/>
+
+            <filter
+                name="high_priority"
+                string="High Priority"
+                domain="[('priority', 'in', ['2', '3'])]"/>
+
+            <filter
+                name="overdue"
+                string="Overdue"
+                domain="[('date_closed', '=', False), ('date_requested', '&lt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S'))]"/>
+
+            <filter
+                name="done"
+                string="Done"
+                domain="[('stage_id.is_done_stage', '=', True)]"/>
+
+            <filter
+                name="cancelled"
+                string="Cancelled"
+                domain="[('stage_id.is_cancelled_stage', '=', True)]"/>
+
+            <separator/>
+
+            <!-- GROUP BY -->
+            <group expand="0" string="Group By">
+                <filter
+                    name="group_category"
+                    string="Category"
+                    context="{'group_by': 'category'}"/>
+                <filter
+                    name="group_priority"
+                    string="Priority"
+                    context="{'group_by': 'priority'}"/>
+                <filter
+                    name="group_stage"
+                    string="Stage"
+                    context="{'group_by': 'stage_id'}"/>
+                <filter
+                    name="group_assigned"
+                    string="Assigned To"
+                    context="{'group_by': 'assigned_to'}"/>
+                <filter
+                    name="group_date_week"
+                    string="Date Requested (Week)"
+                    context="{'group_by': 'date_requested:week'}"/>
+                <filter
+                    name="group_date_month"
+                    string="Date Requested (Month)"
+                    context="{'group_by': 'date_requested:month'}"/>
+            </group>
+
+        </search>
+    </field>
+</record>
+
     <!-- List View -->
     <record id="view_helpdesk_ticket_list" model="ir.ui.view">
         <field name="name">helpdesk.ticket.list</field>
@@ -46,6 +124,8 @@
 
             <sheet>
                 <!-- MAIN FIELDS -->
+                 <widget name="web_ribbon" title="Done" bg_color="text-bg-success" invisible="not is_done_stage"/>
+                 <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="not is_cancelled_stage"/>
                 <group>
                     <group>
                         <field name="name" readonly="1" placeholder="TKT-0000"/>
@@ -116,10 +196,8 @@
                 <group string="Attachments">
                     <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                 </group>
-                <widget name="web_ribbon" title="Done" bg_color="text-bg-success" invisible="not is_done_stage"/>
-                <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="not is_cancelled_stage"/>
+               
             </sheet>
-
             <!-- CHATTER -->
             <chatter/>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+    <!-- DITO AKO NAG ACTIVATE NG MGA VIEW MODES KANBAN,LIST,FORM ETC -->
     <record id="action_helpdesk_ticket" model="ir.actions.act_window">
     <field name="name">Tickets</field>
     <field name="res_model">helpdesk.ticket</field>

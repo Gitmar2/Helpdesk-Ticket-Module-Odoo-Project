@@ -115,6 +115,7 @@ class HelpdeskTicket(models.Model):
 
  # ===== MGA METHOD NASA IBABA =====
 
+# ===== auto generate ticket names=====
     @api.model_create_multi
     def create(self, vals_list):
             for vals in vals_list:

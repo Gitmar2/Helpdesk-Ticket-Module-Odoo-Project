@@ -1,4 +1,6 @@
+
 <odoo>
+ <!-- Helpdesk Ticket Sequence - linked to ticket.py for auto-naming -->
     <data noupdate="1">
         <record id="seq_helpdesk_ticket" model="ir.sequence">
             <field name="name">Helpdesk Ticket Sequence</field>

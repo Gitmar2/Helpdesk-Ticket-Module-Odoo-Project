@@ -1,4 +1,5 @@
 <odoo>
+ <!-- Helpdesk Ticket Stages dito naman yung progress stages ng ticket -->
     <data noupdate="0">
         <record id="stage_new" model="helpdesk.ticket.stage">
             <field name="name">New</field>
