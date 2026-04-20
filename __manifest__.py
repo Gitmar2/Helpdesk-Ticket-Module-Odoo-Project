@@ -6,14 +6,15 @@
     'category': 'Tools',
     'depends': ['base', 'mail', 'hr'],
 'data': [
-        'security/groups.xml',            # DAPAT MAUNA PARA SA ROLES
-        'security/ir.model.access.csv',   # SUNOD ANG PERMISSIONS
+        'security/groups.xml', 
+        'wizard/refuse_wizard_views.xml',
+        'security/ir.model.access.csv', 
         'data/sequence.xml',
         'data/stages.xml',
         'views/ticket_views.xml',         # LOAD VIEWS BAGO MENU
         'views/stage_views.xml',
         'views/employee_inherit.xml',
-        'views/menus.xml',                # DAPAT HULI ANG MENU
+        'views/menus.xml',               
     ],
     'installable': True,
     'application': True,

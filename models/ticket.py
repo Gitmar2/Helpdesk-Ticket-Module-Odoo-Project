@@ -41,7 +41,7 @@ class HelpdeskTicket(models.Model):
     approved_by = fields.Many2one('res.users')
     refused_reason = fields.Text()
     tag_ids = fields.Many2many('helpdesk.tag')
-    assigned_to = fields.Many2one('res.users')
+    _to = fields.Many2one('res.users')
     color = fields.Integer()
 
     # IT Support Fields
@@ -123,3 +123,8 @@ class HelpdeskTicket(models.Model):
                     # Generate sequence number for the ticket
                     vals['name'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or 'New'
             return super().create(vals_list)
+    
+    # ===== Add to Assigned To =====
+    assigned_to = fields.Many2one('res.users', string="Assigned To")
+   
+
