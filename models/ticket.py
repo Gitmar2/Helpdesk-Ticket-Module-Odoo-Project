@@ -108,8 +108,7 @@ class HelpdeskTicket(models.Model):
         self.ensure_one()
         stage = self._get_stage_by_name('For Approval Done')
         
-        # BINAGO/DINAGDAG: Isinama ang 'state': 'in_review' sa dictionary 
-        # para sigurado ang transition ng buttons sa XML.
+        # Explicitly set state to 'in_review' to sync with UI buttons 
         values = {'stage_id': stage.id, 'state': 'in_review'} if stage else {'state': 'in_review'}
         
         self.write(values)
