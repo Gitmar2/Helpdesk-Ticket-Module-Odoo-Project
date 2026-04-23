@@ -8,6 +8,7 @@
 'data': [
         'security/groups.xml', 
         'security/ir.model.access.csv', 
+        'security/record_rules.xml',
         'data/sequence.xml',
         'data/stages.xml',
         'wizard/refuse_wizard_views.xml',

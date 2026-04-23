@@ -104,7 +104,7 @@
         <field name="arch" type="xml">
             <form>
 
-                <!-- STATUS BAR -->
+                <!-- STATUS BAR  invisible="state not in ['draft', 'in_review']" -->
                 <header>
                     <button name="action_mark_done"
                         string="Mark as Done"
@@ -131,10 +131,24 @@
                         type="object"
                         invisible="state != 'refused'" />
 
-                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}" />
+                    <!-- Para sa Manager at Agent — clickable -->
+                    <field name="stage_id"
+                        widget="statusbar"
+                        options="{'clickable': '1'}"
+                        groups="helpdesk_ticket.group_helpdesk_agent,helpdesk_ticket.group_helpdesk_manager" />
+
+                    <!-- Para sa User — hindi clickable -->
+                    <field name="stage_id"
+                        widget="statusbar"
+                        options="{'clickable': '0'}"
+                        groups="helpdesk_ticket.group_helpdesk_user" />
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,in_review,approved,refused 
+                           " />
                 </header>
 
                 <sheet>
+
                     <!-- MAIN FIELDS -->
                     <widget name="web_ribbon" title="Done" bg_color="text-bg-success"
                         invisible="not is_done_stage" />
@@ -142,6 +156,7 @@
                         invisible="not is_cancelled_stage" />
                     <group>
                         <group>
+
                             <field name="name" readonly="1" placeholder="TKT-0000" />
                             <field name="employee_id" />
                             <field name="category" />

@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        </data>
+
+        <!-- HELPDESK USER: Own tickets only (where employee_id = current user's employee) -->
+        <record id="helpdesk_ticket_rule_user" model="ir.rule">
+            <field name="name">Helpdesk User: Own Tickets Only</field>
+            <field name="model_id" ref="model_helpdesk_ticket"/>
+            <field name="groups" eval="[(4, ref('group_helpdesk_user'))]"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- HELPDESK AGENT: Can see all tickets, but edit only assigned to them -->
+        <record id="helpdesk_ticket_rule_agent_read" model="ir.rule">
+            <field name="name">Helpdesk Agent: Read All Tickets</field>
+            <field name="model_id" ref="model_helpdesk_ticket"/>
+            <field name="groups" eval="[(4, ref('group_helpdesk_agent'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="helpdesk_ticket_rule_agent_write" model="ir.rule">
+            <field name="name">Helpdesk Agent: Edit Assigned Tickets Only</field>
+            <field name="model_id" ref="model_helpdesk_ticket"/>
+            <field name="groups" eval="[(4, ref('group_helpdesk_agent'))]"/>
+            <field name="domain_force">[('assigned_to', '=', user.id)]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- HELPDESK MANAGER: Full access — no restrictions -->
+        <record id="helpdesk_ticket_rule_manager" model="ir.rule">
+            <field name="name">Helpdesk Manager: Full Access</field>
+            <field name="model_id" ref="model_helpdesk_ticket"/>
+            <field name="groups" eval="[(4, ref('group_helpdesk_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
 </odoo>

@@ -187,6 +187,10 @@ class HelpdeskTicket(models.Model):
         - Do NOT set date_closed on stage changes
         - Notify assigned user when assignment changes
         """
+        import logging
+        _logger = logging.getLogger(__name__)
+        _logger.info("WRITE CALLED: vals=%s, current states=%s", vals, self.mapped('state'))
+
         # Track old assigned_to for notifications
         old_assigned_map = {record.id: record.assigned_to.id for record in self}
 
@@ -199,6 +203,17 @@ class HelpdeskTicket(models.Model):
                     vals['state'] = 'in_review'
                 elif vals.get('state') not in ('approved', 'refused'):
                     vals['state'] = 'in_review'
+            
+            elif not stage.is_cancelled_stage:
+             import logging
+            _logger = logging.getLogger(__name__)
+            _logger.info("STAGE NAME: %s, is_done: %s, is_cancelled: %s", 
+                 stage.name, stage.is_done_stage, stage.is_cancelled_stage)
+            if all(r.state not in ('approved', 'refused') for r in self):
+             vals['state'] = 'draft'
+            _logger.info("RESETTING STATE TO DRAFT")
+        
+        
 
         # APPROVAL RULE: When state becomes 'approved', set date_closed
         if vals.get('state') == 'approved' and not vals.get('date_closed'):
