@@ -320,7 +320,7 @@ class HrEmployee(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Employee Tickets',
             'res_model': 'helpdesk.ticket',
-            'view_mode': 'kanban,tree,form,calendar,pivot,graph',
+            'view_mode': 'kanban,list,form,calendar,pivot,graph',
             'domain': [('employee_id', '=', self.id)],
             'context': {'default_employee_id': self.id},
         }
@@ -331,7 +331,7 @@ class HrEmployee(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Assigned Tickets',
             'res_model': 'helpdesk.ticket',
-            'view_mode': 'kanban,tree,form,calendar,pivot,graph',
+            'view_mode': 'kanban,list,form,calendar,pivot,graph',
             'domain': [('assigned_to', '=', self.user_id.id)] if self.user_id else [('assigned_to', '=', False)],
             'context': {'default_assigned_to': self.user_id.id if self.user_id else False},
         }
