@@ -177,13 +177,11 @@ class HelpdeskTicket(models.Model):
             values['stage_id'] = stage.id
         self.write(values)
         self.message_post(body="Ticket has been reopened and returned to the active pipeline.")
-
     def _check_refused_reason(self):
         # Ensure that refused tickets always include a refusal reason.
         for record in self:
             if record.state == 'refused' and not record.refused_reason:
                 raise ValidationError('A reason is required when refusing a ticket.')
-
     @api.constrains('state', 'refused_reason')
     def _validate_refused_reason(self):
         self._check_refused_reason()
@@ -245,7 +243,6 @@ class HelpdeskTicket(models.Model):
     def create(self, vals_list):
         """
         Create new helpdesk tickets with proper initialization.
-        
         Refined spec requirements:
         - state defaults to 'draft' (approval lifecycle)
         - stage_id defaults to 'New' (pipeline stage)
@@ -280,8 +277,6 @@ class HelpdeskTicket(models.Model):
                 record.message_post(body=f"Ticket assigned to {record.assigned_to.display_name}.")
         
         return records
-
-
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
