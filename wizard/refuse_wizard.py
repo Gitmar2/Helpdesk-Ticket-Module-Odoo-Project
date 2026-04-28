@@ -10,9 +10,9 @@ class HelpdeskRefuseWizard(models.TransientModel):
 
     def action_confirm_refusal(self):
         # Confirm the refusal and update the linked ticket
-        # According to refined spec: state='refused', stage_id='In Progress', refused_reason saved
+        # According to refined spec: state='refused', stage_id='Cancelled', refused_reason saved
         self.ensure_one()
-        stage = self.env['helpdesk.ticket.stage'].search([('name', '=', 'In Progress')], limit=1)
+        stage = self.env['helpdesk.ticket.stage'].search([('name', '=', 'Approval Rejected')], limit=1)
         values = {
             'state': 'refused',
             'refused_reason': self.refused_reason,

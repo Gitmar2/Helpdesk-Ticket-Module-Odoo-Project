@@ -7,6 +7,21 @@ class HelpdeskTicket(models.Model):
     _description = 'Helpdesk Ticket'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'name'
+    
+    def action_cancel_ticket(self):
+        self.ensure_one()
+        
+        cancelled_stage = self.env['helpdesk.ticket.stage'].search([('name', '=', 'Cancelled')], limit=1)
+        
+        vals = {'state': 'refused'}
+        if cancelled_stage:
+           vals['stage_id'] = cancelled_stage.id
+           
+        if not self.refused_reason:
+            vals['refused_reason'] = "Cancelled by the user/requester."
+            
+            self.write(vals)
+            self.message_post(body="Ticket has been cancelled.")
 
     name = fields.Char(string="Name", readonly=True, default='New', copy=False)
     employee_id = fields.Many2one('hr.employee', required=True, string='Requesting Employee')
@@ -48,6 +63,7 @@ class HelpdeskTicket(models.Model):
         ('in_review', 'for Approval'),
         ('approved', 'Approved'),
         ('refused', 'Refused'),
+        ('cancelled', 'Cancelled'),
     ], default='draft', tracking=True, string='Approval State')
     attachment_ids = fields.Many2many('ir.attachment', string='Attachments')
     date_requested = fields.Datetime(default=fields.Datetime.now, string='Date Requested')
@@ -133,7 +149,7 @@ class HelpdeskTicket(models.Model):
 
     def action_refuse(self):
         # Open the refusal wizard so a manager can enter the rejection reason
-        # After confirmation, state becomes 'refused' and stage moves to 'In Progress'
+        # After confirmation, state becomes 'refused' and stage moves to 'Cancelled'
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
@@ -197,7 +213,6 @@ class HelpdeskTicket(models.Model):
             # RULE: If moving to New or In Progress, reset state to 'draft'
             if stage.name in ['New', 'In Progress']:
                 vals['state'] = 'draft'
-            
             # RULE: If moving to for Approval, set state to 'in_review'
             elif stage.name == 'for Approval':
                 vals['state'] = 'in_review'
@@ -205,6 +220,16 @@ class HelpdeskTicket(models.Model):
             elif stage.name == 'Done':
                 if 'state' not in vals:
                     vals['state'] = 'approved'
+                    vals['date_closed'] = fields.Date.today()
+            #logic para sa Cancelled vs Approval Rejected
+            elif stage.name == 'Cancelled':
+                vals['state'] = 'cancelled' 
+                if not self.refused_reason:
+                    vals['refused_reason'] = "Ticket was cancelled by the user."
+            
+            elif stage.name == 'Approval Rejected':
+                vals['state'] = 'refused'
+            
 
         # 4. PERFORM THE ACTUAL WRITE: Call the parent class method and store the result
         result = super(HelpdeskTicket, self).write(vals)
@@ -320,26 +345,18 @@ class HrEmployee(models.Model):
 
  # ===== MGA METHOD NASA IBABA =====
 
-    @api.onchange('stage_id')
-    def _onchange_stage_debug(self):
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("DEBUG: ONCHANGE TRIGGERED!")
-        print("New Stage:", self.stage_id.name)
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        if self.stage_id.name in ['New', 'In Progress']:
-            self.state = 'draft'
-
-    def write(self, vals):
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("DEBUG: WRITE METHOD TRIGGERED!")
-        print("Vals:", vals)
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        if 'stage_id' in vals:
-            stage = self.env['helpdesk.ticket.stage'].browse(vals['stage_id'])
-            if stage.name in ['New', 'In Progress']:
-                vals['state'] = 'draft'
-        return super(HelpdeskTicket, self).write(vals)
-    
-   
-   
+    def action_cancel_ticket(self):
+        self.ensure_one()
+        
+        cancelled_stage = self.env['helpdesk.ticket.stage'].search([('name', '=', 'Cancelled')], limit=1)
+        
+        vals = {'state': 'refused'}
+        if cancelled_stage:
+           vals['stage_id'] = cancelled_stage.id
+           
+        if not self.refused_reason:
+            vals['refused_reason'] = "Cancelled by the user/requester."
+            
+            self.write(vals)
+            self.message_post(body="Ticket has been cancelled.")
 
